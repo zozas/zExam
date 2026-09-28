@@ -1,5 +1,5 @@
 Working deployement
-<h1>zexam.xo.je</h1>
+<h1>https://zexam.xo.je</h1>
 
 <h1>Manual</h1>
 
