@@ -1,3 +1,6 @@
+Working deployement
+<h1>zexam.xo.je</h1>
+
 <h1>Manual</h1>
 
 <h2>1. Overview & Application Architecture</h2>
