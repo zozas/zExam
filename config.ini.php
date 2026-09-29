@@ -6,6 +6,7 @@
 	CONTACT					= "zozas@hotmail.com"
 	COPYRIGHT				= "GNU GPL v3+ 2026"
 	GOOGLE					= ""
+	GRADE					= 10
 	DESCRIPTION				= "Exam quiz engine"
 	DATABASE_EXTENSION		= "ini.php"
 	DATABASES				= "data"

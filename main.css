@@ -23,7 +23,7 @@ body {
 	position:				relative;
 }
 .question-area {
-	height:					40%;
+	height:					25%;
 	display:				flex;
 	justify-content:		center;
 	align-items:			center;
@@ -34,7 +34,7 @@ body {
 	font-weight:			bold;
 }
 .answer-area {
-	height:					50%;
+	height:					65%;
 	position:				relative;
 }
 .answer-grid {
@@ -211,7 +211,19 @@ body {
 	cursor:					pointer;
 	overflow:				hidden;
 	padding:				20px;
-	width:					300px;
+	width:					180px;
+}
+.admin-btn {
+	position:				relative;
+	border:					none;
+	border-radius:			12px;
+	font-size:				clamp(1.12rem, 2.4vw, 1.8rem);
+	font-weight:			bold;
+	color:					#444444;
+	cursor:					pointer;
+	overflow:				hidden;
+	padding:				10px;
+	width:					180px;
 }
 .quiz_upload {
 	display:				inline-block;

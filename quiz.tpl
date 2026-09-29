@@ -14,4 +14,5 @@
 						<b>
 							[@result_grade]
 						</b>
+						<sub><small>/ [@max_grade]</small></sub>
 					</h1>

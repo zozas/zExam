@@ -5,7 +5,7 @@
 						[@description]
 					</h4>
 					<br />
-					<h4>
+					<h6>
 						[@total_databases] [@databases]
 						<br />
 						[@app_version] [@version]
@@ -16,4 +16,4 @@
 						[@copyright]
 						<br />
 						<a href='mailto:[@contact]' target='_blank'>[@author]</a>
-					</h4>
+					</h6>

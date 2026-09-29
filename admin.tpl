@@ -3,7 +3,17 @@
 						<table>
 							<tr>
 								<td>
-									<button type='submit' class='menu-btn'>[@create]</button>
+									<button type='submit' class='admin-btn'>[@create]</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<form id='template-form' method='post' class='answer-area'>
+						<input type='hidden' name='action' value='admin_download' />
+						<table>
+							<tr>
+								<td>
+									<button type='submit' class='admin-btn'>[@download]</button>
 								</td>
 							</tr>
 						</table>
@@ -13,7 +23,7 @@
 						<table>
 							<tr>
 								<td>
-									<button type='submit' class='menu-btn'>[@update]</button>
+									<button type='submit' class='admin-btn'>[@update]</button>
 								</td>
 							</tr>
 						</table>
@@ -23,7 +33,7 @@
 						<table>
 							<tr>
 								<td>
-									<button type='submit' class='menu-btn'>[@results]</button>
+									<button type='submit' class='admin-btn'>[@results]</button>
 								</td>
 							</tr>
 						</table>
@@ -33,7 +43,7 @@
 						<table>
 							<tr>
 								<td>
-									<button type='submit' class='menu-btn'>[@delete]</button>
+									<button type='submit' class='admin-btn'>[@delete]</button>
 								</td>
 							</tr>
 						</table>
@@ -43,7 +53,7 @@
 						<table>
 							<tr>
 								<td>
-									<button type='submit' class='menu-btn'>[@template]</button>
+									<button type='submit' class='admin-btn'>[@template]</button>
 								</td>
 							</tr>
 						</table>

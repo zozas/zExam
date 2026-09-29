@@ -51,13 +51,97 @@
 		$template_admin = new template;
 		$template_admin->open('admin.tpl');
 		$template_admin->set('create', $language->get('STRING', 'CREATE'));
+		$template_admin->set('download', $language->get('STRING', 'DOWNLOAD'));
 		$template_admin->set('update', $language->get('STRING', 'UPDATE'));
 		$template_admin->set('results', $language->get('STRING', 'RESULTS'));
 		$template_admin->set('delete', $language->get('STRING', 'DELETE'));
 		$template_admin->set('template', $language->get('STRING', 'TEMPLATE'));
 		$template_main->set('game_options', $template_admin->get());
 		$template_main->set('game_progress', '');
-	// Quiz update
+	// Quiz download
+	} else if ($action=='admin_download') {
+		$template_main->set('game_content', $language->get('STRING', 'ADMIN'));
+		$template_admin = new template;
+		$template_admin->open('download.tpl');
+		$template_admin->set('pin_length', $config->get('APPLICATION', 'PIN_LENGTH'));
+		$template_admin->set('pin_name', $language->get('STRING', 'PIN_QUIZ'));
+		$template_admin->set('admin_pin_name', $language->get('STRING', 'PIN_QUIZ_ADMIN'));
+		$template_admin->set('submit', $language->get('STRING', 'DOWNLOAD'));
+		$template_admin->set('pin-action', 'admin_download_quiz');
+		$template_main->set('game_options', $template_admin->get());
+		$template_main->set('game_progress', '');
+	// Quiz download file
+	} else if ($action=='admin_download_quiz') {
+		$pin = '';
+		if (isset($_POST['pin']))
+			$pin = $_POST['pin'];
+		else
+			if (isset($_GET['pin']))
+				$pin = $_GET['pin'];
+		$admin_pin = '';
+		if (isset($_POST['admin_pin']))
+			$admin_pin = $_POST['admin_pin'];
+		else
+			if (isset($_GET['admin_pin']))
+				$admin_pin = $_GET['admin_pin'];
+		$result = '';
+		if ($pin === "" || $admin_pin === "") {
+			$result = $language->get('STRING', 'ERROR_PIN_EMPTY');
+		} else {
+			$filepath = $config->get('APPLICATION', 'DATABASES').'/'.$pin.'.'.$config->get('APPLICATION', 'DATABASE_EXTENSION');
+			if (!file_exists($filepath)) {
+				$result = $language->get('STRING', 'ERROR_FILE_MISSING');
+			} else {
+				$content = file_get_contents($filepath);
+				if (!$content) {
+					$result = $language->get('STRING', 'ERROR_FILE_READ');
+				} else {
+					$lines = explode("\n", $content);
+					if (count($lines) < 5) {
+						$result = $language->get('STRING', 'ERROR_FILE_STRUCTURE');
+					} else {
+						$iniLines = array_slice($lines, 3, count($lines) - 5);
+						$iniContent = implode("\n", $iniLines);
+						$ini = parse_ini_string($iniContent, true, INI_SCANNER_RAW);
+						if (!$ini || !isset($ini["DATABASE"])) {
+							$result = $language->get('STRING', 'ERROR_FILE_STRUCTURE');
+						} else {
+							if (!isset($ini["DATABASE"]["ADMIN"])) {
+								$result = $language->get('STRING', 'ERROR_FILE_STRUCTURE');
+							} else {
+								$db_admin = trim($ini["DATABASE"]["ADMIN"]);
+								if ($db_admin !== $admin_pin) {
+									$result = $language->get('STRING', 'ERROR_PIN');
+								} else {
+									if (!file_exists($filepath)) {
+										$result = $language->get('STRING', 'ERROR_FILE_MISSING');
+									} else {
+										$resultspath = $config->get('APPLICATION', 'DATABASES').'/'.$pin.'.'.$config->get('APPLICATION', 'DATABASE_EXTENSION');
+										if (!file_exists($resultspath)) {
+											$result = $language->get('STRING', 'ERROR_FILE_MISSING');
+										} else {
+											header('Content-Description: File Transfer');
+											header('Content-Type: application/octet-stream');
+											header('Content-Disposition: attachment; filename="'.basename($resultspath).'"');
+											header('Expires: 0');
+											header('Cache-Control: must-revalidate');
+											header('Pragma: public');
+											header('Content-Length: '.filesize($resultspath));
+											readfile($resultspath);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		$template_main->set('game_content', $language->get('STRING', 'ADMIN'));
+		$template_admin = new template;
+		$template_main->set('game_options', $language->get('STRING', 'DOWNLOAD'));
+		$template_main->set('game_progress', $result);
+	// Quiz create
 	} else if ($action=='admin_create') {
 		$template_main->set('game_content', $language->get('STRING', 'ADMIN'));
 		$template_admin = new template;
@@ -292,7 +376,7 @@
 											$result = $language->get('STRING', 'ERROR_FILE_MISSING');
 										} else {
 											$fp = fopen('php://memory', 'w');
-											fputcsv($fp, $headers);
+											fputcsv($fp, $headers, ',', '"', '\\');
 											foreach ($lines as $line) {
 												$parts = explode(',', $line);
 												$parts = array_map('trim', $parts);
@@ -441,12 +525,13 @@
 				$template_results->set('title', $database->get('DATABASE', 'TITLE'));
 				$template_results->set('quiz', $language->get('STRING', 'PIN_QUIZ'));
 				$template_results->set('pin', $language->get('STRING', 'PIN_ID'));
+				$template_results->set('max_grade', $config->get('APPLICATION', 'GRADE'));
 				$template_results->set('pin_id', $session->get('ID'));
-				$template_results->set('result_grade', number_format(floatval($score/25)*10,2));
+				$template_results->set('result_grade', number_format(floatval($score/$database->get('DATABASE', 'QUESTIONS'))*$config->get('APPLICATION', 'GRADE'),2));
 				$template_main->set('game_options', $template_results->get());
 				$template_main->set('game_progress', '');
 				$result_file = $config->get('APPLICATION', 'RESULTS').'/'.$session->get('PIN').'.'.$config->get('APPLICATION', 'DATABASE_EXTENSION');
-				file_put_contents($result_file, $session->get('ID').','.$database->get('DATABASE', 'PIN').','.number_format(floatval($score/25)*10,2).','.date('Y-m-d H:i:s').','.$session->ip().PHP_EOL, FILE_APPEND);
+				file_put_contents($result_file, $session->get('ID').','.$database->get('DATABASE', 'PIN').','.number_format(floatval($score/$database->get('DATABASE', 'QUESTIONS'))*$config->get('APPLICATION', 'GRADE'),2).','.date('Y-m-d H:i:s').','.$session->ip().PHP_EOL, FILE_APPEND);
 			} else {
 				$session->erase_session();
 				$template_redirect = new template;
@@ -602,7 +687,7 @@
 					$template_start->set('start', $language->get('STRING', 'START'));
 					$template_start->set('start-current', $session->get('CURRENT'));
 					$template_start->set('start-action', 'exam');
-					$template_main->set('game_content', $language->get('STRING', 'INSTRUCTIONS'));
+					$template_main->set('game_content', $database->get('DATABASE', 'TITLE'));
 					$template_main->set('game_options', $database->get('DATABASE', 'INSTRUCTIONS'));
 					$template_main->set('game_progress', $template_start->get());
 				} else {
