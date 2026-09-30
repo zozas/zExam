@@ -6,8 +6,7 @@
 body {
 	font-family:			Arial, sans-serif;
 	background:				linear-gradient(to bottom, #fdfdfd, #f2f2f2);
-	height:					100vh;
-	overflow:				hidden;
+	height:					auto;
 }
 .quiz-wrapper {
 	height:					94vh;
@@ -223,7 +222,7 @@ body {
 	cursor:					pointer;
 	overflow:				hidden;
 	padding:				10px;
-	width:					180px;
+	width:					220px;
 }
 .quiz_upload {
 	display:				inline-block;
@@ -238,3 +237,24 @@ body {
 	padding:				20px;
 	width:					300px;
 }
+.remove-btn {
+    position: relative;
+    border: none;
+    border-radius: 8px;
+    background: #B71C1C; /* deep red */
+    color: white;
+    font-weight: bold;
+    font-size: clamp(0.8rem, 1.8vw, 1.2rem);
+    cursor: pointer;
+    padding: 6px 10px;
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.remove-btn::before {
+    content: "✖"; /* red X symbol */
+    font-size: clamp(1rem, 2vw, 1.4rem

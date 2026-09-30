@@ -55,9 +55,61 @@
 		$template_admin->set('update', $language->get('STRING', 'UPDATE'));
 		$template_admin->set('results', $language->get('STRING', 'RESULTS'));
 		$template_admin->set('delete', $language->get('STRING', 'DELETE'));
+		$template_admin->set('generate', $language->get('STRING', 'GENERATE'));
 		$template_admin->set('template', $language->get('STRING', 'TEMPLATE'));
 		$template_main->set('game_options', $template_admin->get());
 		$template_main->set('game_progress', '');
+	// Quiz generate
+	} else if ($action=='admin_generate') {
+		$template_main->set('game_content', $language->get('STRING', 'ADMIN'));
+		$template_admin = new template;
+		$template_admin->open('generate.tpl');
+		$template_admin->set('pin_length', $config->get('APPLICATION', 'PIN_LENGTH'));
+		$template_admin->set('question', $language->get('STRING', 'QUESTION'));
+		$template_admin->set('generate', $language->get('STRING', 'GENERATE'));
+		$template_admin->set('question_add', $language->get('STRING', 'QUESTION_ADD'));
+		$template_admin->set('question_list', $language->get('STRING', 'QUESTION_LIST'));
+		$template_admin->set('language', $language->get('STRING', 'LANGUAGE'));
+		$template_admin->set('instructions', $language->get('STRING', 'INSTRUCTIONS'));
+		$template_admin->set('version', $language->get('STRING', 'VERSION'));
+		$template_admin->set('title', $language->get('STRING', 'TITLE'));
+		$template_admin->set('author', $language->get('STRING', 'AUTHOR'));
+		$template_admin->set('pin', $language->get('STRING', 'PIN_QUIZ'));
+		$template_admin->set('adminpin', $language->get('STRING', 'PIN_QUIZ_ADMIN'));
+		$template_admin->set('quizdata', $language->get('STRING', 'QUIZ_DATA'));
+		$template_admin->set('answer', $language->get('STRING', 'ANSWER'));
+		$template_admin->set('question_correct', $language->get('STRING', 'QUESTION_CORRECT'));
+		$template_main->set('game_options', $template_admin->get());
+		$template_main->set('game_progress', '');
+	// Quiz generate file
+	} else if ($action=='admin_generate_file') {
+		if (!empty($_POST)) {
+			$meta = ['ADMIN' => $_POST['admin'], 'AUTHOR' => $_POST['author'], 'TITLE' => $_POST['title'], 'VERSION' => $_POST['version'], 'INSTRUCTIONS' => $_POST['instructions'], 'LANGUAGE' => $_POST['language'], 'PIN' => $_POST['pin']];
+			$db = new DatabaseGenerator($meta);
+			$titles = $_POST['q_title'];
+			$a1 = $_POST['a1'];
+			$a2 = $_POST['a2'];
+			$a3 = $_POST['a3'];
+			$a4 = $_POST['a4'];
+			$corrects = $_POST['correct'];
+			for ($i = 0; $i < count($titles); $i++) {
+				$db->addQuestion($titles[$i], [$a1[$i], $a2[$i], $a3[$i], $a4[$i]], $corrects[$i]);
+			}
+			$content = $db->generate();
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename='.$_POST['pin'].'.'.$config->get('APPLICATION', 'DATABASE_EXTENSION'));
+			header('Content-Length: ' . strlen($content));
+			echo $content;
+			exit;
+		} else {
+			$session->erase_session();
+			$template_redirect = new template;
+			$template_redirect->open('redirect.tpl');
+			$template_redirect->set('url', '?');
+			$template_main->set('game_content', '');
+			$template_main->set('game_options', '');
+			$template_main->set('game_progress', $template_redirect->get());
+		}
 	// Quiz download
 	} else if ($action=='admin_download') {
 		$template_main->set('game_content', $language->get('STRING', 'ADMIN'));

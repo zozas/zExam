@@ -167,4 +167,43 @@ class template {
 		return $output;
 	}
 }
+class DatabaseGenerator {
+	private $meta = [];
+	private $questions = [];
+	public function __construct($meta = []) {
+        $this->meta = array_merge(["ADMIN" => "0001", "AUTHOR" => "UNKNOWN", "ENTRIES" => 0, "INSTRUCTIONS" => "", "LANGUAGE"     => "el", "PIN" => "0000", "QUESTIONS" => 0, "TITLE" => "UNTITLED", "VERSION" => "1.0"], $meta);
+    }
+	public function addQuestion($title, $answers, $correctIndex) {
+		$cleanAnswers = array_map(function($a) { return is_array($a) ? json_encode($a, JSON_UNESCAPED_UNICODE) : $a; }, $answers);
+        $this->questions[] = ["title" => $title, "answers" => $cleanAnswers, "correct" => $correctIndex];
+    }
+	public function generate() {
+		$output  = ";<?php\n;die();\n;/*\n";
+		$this->meta["ENTRIES"] = count($this->questions);
+		$this->meta["QUESTIONS"] = count($this->questions);
+		$output .= "[DATABASE]\n";
+		foreach ($this->meta as $key => $value) {
+			if (is_array($value)) {
+				$value = json_encode($value, JSON_UNESCAPED_UNICODE);
+			}
+			$value = str_replace('"', '\"', $value);
+			$output .= "\t{$key}\t= \"{$value}\"\n";
+		}
+		$i = 1;
+		foreach ($this->questions as $q) {
+			$output .= "[Q_{$i}]\n";
+			$title = str_replace('"', '\"', $q['title']);
+			$output .= "\tTITLE = \"{$title}\"\n";
+			foreach ($q["answers"] as $index => $ans) {
+				$num = $index + 1;
+				$ans = str_replace('"', '\"', $ans);
+				$output .= "\tANSWER_{$num} = \"{$ans}\"\n";
+			}
+			$output .= "\tCORRECT = {$q['correct']}\n";
+			$i++;
+		}
+		$output .= "*/\n;?>";
+		return $output;
+	}
+}
 ?>

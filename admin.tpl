@@ -49,6 +49,16 @@
 						</table>
 					</form>
 					<form id='template-form' method='post' class='answer-area'>
+						<input type='hidden' name='action' value='admin_generate' />
+						<table>
+							<tr>
+								<td>
+									<button type='submit' class='admin-btn'>[@generate]</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<form id='template-form' method='post' class='answer-area'>
 						<input type='hidden' name='action' value='admin_template' />
 						<table>
 							<tr>
