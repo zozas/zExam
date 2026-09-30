@@ -9,20 +9,19 @@ body {
 	height:					auto;
 }
 .quiz-wrapper {
-	height:					94vh;
+    min-height:				100vh;
+    height:					auto;
 	display:				flex;
 	flex-direction:			column;
 	position:				relative;
 }
 .logo-area {
-	height:					10%;
 	display:				flex;
 	justify-content:		center;
 	align-items:			center;
 	position:				relative;
 }
 .question-area {
-	height:					25%;
 	display:				flex;
 	justify-content:		center;
 	align-items:			center;
@@ -33,7 +32,6 @@ body {
 	font-weight:			bold;
 }
 .answer-area {
-	height:					65%;
 	position:				relative;
 }
 .answer-grid {
