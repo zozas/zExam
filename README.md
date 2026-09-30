@@ -2,7 +2,7 @@
 - Configuration file : config.ini.php
 - Language file for translations : language.ini.php (all strings stored) and help.html (manual)
 - 2 directories with full read/write premissions named "data" (the uploaded quiz databases) and "results" (the results stored), as defined in the config.ini.php file
-- Ready to use
+- Ready to use, just copy-paste to a PHP-ready server, full project under 100kb
 
 <h1>Manual</h1>
 
