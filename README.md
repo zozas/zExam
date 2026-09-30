@@ -1,5 +1,8 @@
-Working deployement
-<h1>https://zexam.xo.je</h1>
+- Working deployment : <b>https://zexam.xo.je</b>
+- Configuration file : config.ini.php
+- Language file for translations : language.ini.php (all strings stored) and help.html (manual)
+- 2 directories with full read/write premissions named "data" (the uploaded quiz databases) and "results" (the results stored), as defined in the config.ini.php file
+- Ready to use
 
 <h1>Manual</h1>
 
