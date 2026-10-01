@@ -6,7 +6,9 @@
 body {
 	font-family:			Arial, sans-serif;
 	background:				linear-gradient(to bottom, #fdfdfd, #f2f2f2);
-	height:					auto;
+	background-attachment:	fixed;
+	background-repeat:		no-repeat;
+	min-height:				100vh;
 }
 .quiz-wrapper {
     min-height:				100vh;
