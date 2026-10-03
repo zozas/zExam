@@ -38,8 +38,8 @@
 								</td>
 							</tr>
 							<tr>
-								<td>
-									<button type='submit' id='menu-btn' class='menu-btn'>[@submit]</button>
+								<td align='center'>
+									<button type='submit' class='menu-btn'>[@submit]</button>
 								</td>
 							</tr>
 						</table>
